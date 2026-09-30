@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#061221" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FloodConnect" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <title>FloodConnect</title>
+  <style>
+    :root{--bg:#061221;--card:#102740;--card2:#102a46;--blue:#176fce;--blue2:#2688ff;--muted:#6687a7;--text:#fff;--danger:#ff5a61;--orange:#ff861d;--green:#24d269}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100%}
+    body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+    .app{max-width:680px;margin:0 auto;min-height:100vh;padding:22px}
+    .screen{display:none}.screen.active{display:block}
+    h1,h2,h3,p{margin-top:0}.brand{font-size:32px;font-weight:800;letter-spacing:-.8px}.sub{color:var(--muted)}
+    .hero{padding:10px 0 24px}.badge{display:inline-block;padding:7px 10px;border-radius:999px;background:#0d3158;color:#8fc6ff;font-size:12px;font-weight:700;margin-bottom:14px}
+    .grid2,.grid3{display:grid;gap:10px}.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:repeat(3,1fr)}
+    button,.btn{appearance:none;border:0;border-radius:14px;background:var(--card2);color:#fff;padding:16px 14px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;text-align:center;display:block;width:100%}
+    button.primary,.btn.primary{background:var(--blue)} .btn.outline,button.outline{border:1px solid #28527d;background:transparent}
+    button.selected{outline:2px solid var(--blue2);background:#123a63}
+    label{display:block;color:#77a1c6;font-size:12px;font-weight:800;letter-spacing:.6px;margin:18px 0 8px}
+    input,textarea{width:100%;border:1px solid #1d4c78;border-radius:12px;background:#081a2d;color:#fff;padding:15px;font-size:16px;outline:none}
+    input:focus,textarea:focus{border-color:var(--blue2)}textarea{min-height:110px;resize:vertical}
+    .card{background:var(--card);border-radius:16px;padding:18px;margin-bottom:14px}.warn{background:#251b29;color:var(--danger);font-weight:800}
+    .stat{text-align:center;padding:18px 6px}.stat b{display:block;font-size:28px}.stat small{color:var(--muted)}
+    .section-title{color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.7px;margin:28px 0 12px}
+    .report-type{min-height:74px}.meta{font-size:13px;color:var(--muted)}
+    .topbar{display:flex;align-items:center;gap:10px;margin-bottom:20px}.back{width:auto;padding:10px 13px;border-radius:12px}.grow{flex:1}
+    .downloadbox{background:linear-gradient(145deg,#0e2b49,#0b1f35);border:1px solid #1f4d77;border-radius:18px;padding:20px;margin:18px 0}.downloadbox h2{margin-bottom:8px}
+    .note{font-size:13px;color:#8aa8c2;line-height:1.55}.success{color:#8fe6b1}.hidden{display:none!important}.center{text-align:center}
+    .mapbox{border:1px dashed #2d659b;border-radius:18px;padding:34px 18px;text-align:center;background:#081a2d}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#112b46;color:#8fb4d7;font-size:12px;margin:3px}
+    .install-help{background:#0b2036;border-radius:14px;padding:15px;margin-top:12px;font-size:14px;color:#b4cae0;line-height:1.55}
+    @media(max-width:420px){.app{padding:18px}.grid3{gap:7px}.stat b{font-size:23px}button,.btn{padding:14px 10px;font-size:14px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <section id="landing" class="screen">
+    <div class="hero">
+      <span class="badge">Flood Emergency Reporting</span>
+      <div class="brand">FloodConnect</div>
+      <p class="sub">Satu pautan untuk Android dan iPhone.</p>
+    </div>
+
+    <div id="androidBox" class="downloadbox">
+      <h2>🤖 Android</h2>
+      <p class="sub">Pasang aplikasi Android asal.</p>
+      <a class="btn primary" href="download/FloodConnect-Android.apk" download>Download APK Android</a>
+      <div class="install-help">Selepas download, buka fail APK. Jika telefon blok pemasangan, benarkan <b>Install unknown apps</b> untuk browser/File Manager yang digunakan.</div>
+    </div>
+
+    <div id="iosBox" class="downloadbox">
+      <h2>🍎 iPhone / iPad</h2>
+      <p class="sub">Gunakan FloodConnect sebagai Web App — tak perlu APK.</p>
+      <button class="primary" onclick="go('login')">Buka FloodConnect Web App</button>
+      <div class="install-help">Dalam Safari: <b>Share → Add to Home Screen → Open as Web App → Add</b>.</div>
+    </div>
+
+    <button class="outline" onclick="go('login')">Guna Web App pada telefon ini</button>
+    <p class="note center" style="margin-top:18px">QR nanti hanya perlu link ke halaman ini.</p>
+  </section>
+
+  <section id="login" class="screen active">
+    <div class="topbar"><div class="grow"></div><button id="installBtn" class="back" onclick="installPWA()">Install App</button></div>
+    <div class="brand">FloodConnect</div>
+    <p class="sub">Laporan & pemantauan banjir kilat</p>
+    <h1 style="margin-top:34px">Log Masuk</h1>
+    <p class="sub">Pilih peranan anda untuk meneruskan</p>
+    <div id="iosHelp" class="install-help hidden">iPhone: buka menu <b>Share</b> dalam Safari → <b>Add to Home Screen</b> → <b>Add</b>. Anda juga boleh guna terus tanpa install.</div>
+    <label>PERANAN PENGGUNA</label>
+    <div class="grid2">
+      <button id="rolePublic" class="selected" onclick="selectRole('PUBLIC')">Orang Awam<br><span class="meta">Laporkan banjir</span></button>
+      <button id="roleAgency" onclick="selectRole('AGENCY')">PBT / Agensi<br><span class="meta">Semak & tindakan</span></button>
+    </div>
+    <label>NAMA PENUH</label>
+    <input id="name" placeholder="Cth: Ahmad bin Ibrahim" />
+    <label>NO. IC (PILIHAN)</label>
+    <input id="ic" placeholder="Cth: 900101-14-1234" inputmode="numeric" />
+    <button class="primary" style="margin-top:26px" onclick="login()">Masuk</button>
+  </section>
+
+  <section id="home" class="screen">
+    <div class="topbar"><div class="grow"><h2 id="welcome" style="margin:0">Selamat datang</h2><div class="sub">Pantau banjir kilat di kawasan anda</div></div><button class="back" onclick="logout()">Keluar</button></div>
+    <div class="card warn">● 1 kawasan kritikal memerlukan perhatian segera</div>
+    <div class="grid3">
+      <div class="card stat"><b style="color:var(--blue2)" id="activeCount">5</b><small>Aduan Aktif</small></div>
+      <div class="card stat"><b style="color:var(--danger)">1</b><small>Kritikal</small></div>
+      <div class="card stat"><b style="color:var(--green)" id="todayCount">5</b><small>Hari Ini</small></div>
+    </div>
+    <div class="section-title">TINDAKAN PANTAS</div>
+    <div class="grid2"><button onclick="go('report')">＋<br>Buat Laporan</button><button onclick="go('map')">🗺️<br>Lihat Peta</button></div>
+    <div class="section-title">LAPORAN TERKINI</div>
+    <div id="reportsList"></div>
+  </section>
+
+  <section id="report" class="screen">
+    <div class="topbar"><button class="back" onclick="go('home')">←</button><div class="grow"><h2 style="margin:0">Buat Laporan</h2><div class="sub">Laporkan kejadian banjir di kawasan anda</div></div></div>
+    <label>LOKASI KEJADIAN</label>
+    <input id="location" placeholder="Cth: Jalan Ampang, Kuala Lumpur" />
+    <button class="outline" style="margin-top:9px" onclick="useLocation()">📍 Gunakan lokasi semasa</button>
+    <label>JENIS BANJIR</label>
+    <div class="grid2" id="typeGrid">
+      <button class="report-type" onclick="pickType(this,'Jalan dinaiki air')">Jalan dinaiki air</button>
+      <button class="report-type" onclick="pickType(this,'Kawasan perumahan dinaiki air')">Kawasan perumahan dinaiki air</button>
+      <button class="report-type" onclick="pickType(this,'Longkang tersumbat')">Longkang tersumbat</button>
+      <button class="report-type" onclick="pickType(this,'Air melimpah')">Air melimpah</button>
+      <button class="report-type" onclick="pickType(this,'Tanah runtuh')">Tanah runtuh</button>
+      <button class="report-type" onclick="pickType(this,'Banjir kilat')">Banjir kilat</button>
+    </div>
+    <label>KETERANGAN TAMBAHAN</label>
+    <textarea id="description" placeholder="Terangkan keadaan banjir..."></textarea>
+    <button class="primary" style="margin-top:24px" onclick="submitReport()">Hantar Laporan</button>
+  </section>
+
+  <section id="map" class="screen">
+    <div class="topbar"><button class="back" onclick="go('home')">←</button><div class="grow"><h2 style="margin:0">Peta Banjir</h2></div></div>
+    <div class="mapbox"><div style="font-size:48px">🗺️</div><h3>Peta Banjir</h3><p class="sub">Tekan di bawah untuk gunakan lokasi semasa atau buka peta luar.</p><button onclick="mapMyLocation()">📍 Lokasi Saya</button><a id="mapLink" class="btn outline hidden" target="_blank" rel="noopener" style="margin-top:10px">Buka dalam peta</a><p id="coords" class="note" style="margin-top:12px"></p></div>
+  </section>
+
+  <section id="agency" class="screen">
+    <div class="topbar"><button class="back" onclick="logout()">←</button><div class="grow"><h2 style="margin:0">Dashboard PBT / Agensi</h2><div class="sub">Semak laporan pengguna</div></div></div>
+    <div class="grid3"><div class="card stat"><b style="color:var(--blue2)" id="agencyCount">0</b><small>Jumlah Laporan</small></div><div class="card stat"><b style="color:var(--orange)">1</b><small>Dalam Semakan</small></div><div class="card stat"><b style="color:var(--green)">0</b><small>Selesai</small></div></div>
+    <div class="section-title">LAPORAN MASUK</div><div id="agencyReports"></div>
+  </section>
+</div>
+<script>
+let role='PUBLIC', floodType='';
+const defaultReports=[{loc:'Jalan Ampang, Kuala Lumpur',type:'Jalan dinaiki air',desc:'',status:'Dalam Semakan',severity:'TINGGI'}];
+function savedReports(){try{return JSON.parse(localStorage.getItem('fc_reports'))||defaultReports}catch(e){return defaultReports}}
+function storeReports(r){localStorage.setItem('fc_reports',JSON.stringify(r))}
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);if(id==='home')renderHome();if(id==='agency')renderAgency()}
+function selectRole(r){role=r;document.getElementById('rolePublic').classList.toggle('selected',r==='PUBLIC');document.getElementById('roleAgency').classList.toggle('selected',r==='AGENCY')}
+function login(){const n=document.getElementById('name').value.trim();if(!n){alert('Sila masukkan nama penuh');return}localStorage.setItem('fc_name',n);localStorage.setItem('fc_role',role);if(role==='AGENCY')go('agency');else go('home')}
+function logout(){go('login')}
+function reportCard(r){return `<div class="card"><div style="color:var(--orange);font-weight:800">● ${r.severity||'SEDERHANA'}</div><h3 style="margin:8px 0 4px">${escapeHtml(r.loc)}</h3><div class="meta">${escapeHtml(r.type)}</div>${r.desc?`<p class="note">${escapeHtml(r.desc)}</p>`:''}<div style="color:var(--blue2);margin-top:9px">${escapeHtml(r.status||'Baru')}</div></div>`}
+function renderHome(){const n=localStorage.getItem('fc_name')||'';document.getElementById('welcome').textContent=n?`Selamat datang, ${n}`:'Selamat datang';const r=savedReports();document.getElementById('reportsList').innerHTML=r.slice().reverse().map(reportCard).join('');document.getElementById('activeCount').textContent=r.length;document.getElementById('todayCount').textContent=r.length}
+function renderAgency(){const r=savedReports();document.getElementById('agencyCount').textContent=r.length;document.getElementById('agencyReports').innerHTML=r.slice().reverse().map(reportCard).join('')||'<div class="card sub">Belum ada laporan.</div>'}
+function pickType(el,type){floodType=type;document.querySelectorAll('#typeGrid button').forEach(b=>b.classList.remove('selected'));el.classList.add('selected')}
+function submitReport(){const loc=document.getElementById('location').value.trim(),desc=document.getElementById('description').value.trim();if(!loc){alert('Sila masukkan lokasi kejadian');return}if(!floodType){alert('Sila pilih jenis banjir');return}const r=savedReports();r.push({loc,type:floodType,desc,status:'Baru Dihantar',severity:'SEDERHANA'});storeReports(r);document.getElementById('location').value='';document.getElementById('description').value='';floodType='';document.querySelectorAll('#typeGrid button').forEach(b=>b.classList.remove('selected'));alert('Laporan berjaya dihantar');go('home')}
+function useLocation(){if(!navigator.geolocation){alert('GPS tidak disokong pada browser ini');return}const btn=event.currentTarget;btn.textContent='Mendapatkan lokasi...';navigator.geolocation.getCurrentPosition(p=>{const {latitude,longitude}=p.coords;document.getElementById('location').value=`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;btn.textContent='📍 Gunakan lokasi semasa'},()=>{alert('Lokasi tidak dapat diakses. Pastikan Location/GPS dibenarkan.');btn.textContent='📍 Gunakan lokasi semasa'},{enableHighAccuracy:true,timeout:10000})}
+function mapMyLocation(){if(!navigator.geolocation){alert('GPS tidak disokong');return}navigator.geolocation.getCurrentPosition(p=>{const lat=p.coords.latitude.toFixed(6),lon=p.coords.longitude.toFixed(6);document.getElementById('coords').textContent=`Lokasi: ${lat}, ${lon}`;const a=document.getElementById('mapLink');a.href=`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;a.classList.remove('hidden')},()=>alert('Benarkan akses lokasi untuk menggunakan fungsi ini.'),{enableHighAccuracy:true,timeout:10000})}
+function escapeHtml(s=''){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js').catch(()=>{}))}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.classList.remove('hidden')});
+const ua=navigator.userAgent||'';const isiOS=/iPad|iPhone|iPod/.test(ua);
+if(isiOS){const h=document.getElementById('iosHelp');if(h)h.classList.remove('hidden');}
+async function installPWA(){
+  if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;return;}
+  if(isiOS){alert('iPhone: Safari → Share → Add to Home Screen → Add.');return;}
+  alert('Jika butang install tidak keluar, guna menu browser → Add to Home screen / Install app.');
+}
+
+</script>
+</body>
+</html>
